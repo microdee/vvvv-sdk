@@ -85,6 +85,14 @@ namespace System.Drawing
         }
 
         /// <summary>
+        /// Returns a <see cref="Rectangle">Rectangle</see> by casting the float components to integer.
+        /// </summary>
+        public static Rectangle ToRectangle(this RectangleF rect)
+        {
+            return new Rectangle(rect.Location.ToPoint(), rect.Size.ToSize());
+        }
+
+        /// <summary>
         /// Returns a <see cref="Point">Point</see> by casting the float components to integer.
         /// </summary>
         public static Point ToPoint(this PointF p1)
@@ -204,7 +212,20 @@ namespace System.Drawing
             t.TransformPoints(pts);
             return pts[0];
         }
-        
+
+        /// <summary>
+        /// Applies the geometric transform represented by this Matrix to the
+        /// given rectangle.
+        /// </summary>
+        /// <param name="t">A Matrix</param>
+        /// <param name="rect">The rectangle to transform.</param>
+        /// <returns>The transformed rectangle.</returns>
+        public static Rectangle TransformRectangle(this Matrix t, Rectangle rect)
+        {
+            var tr = TransformRectangle(t, new RectangleF(rect.X, rect.Y, rect.Width, rect.Height));
+            return new Rectangle((int)tr.X, (int)tr.Y, (int)tr.Width, (int)tr.Height);
+        }
+
         /// <summary>
         /// Applies the geometric transform represented by this Matrix to the
         /// given rectangle.
